@@ -2,6 +2,10 @@
 
 GoTrash is a simple command-line tool written in Go that moves files to the trash instead of deleting them permanently. It act has a proxy for the `rm` command, and it provides a safer alternative to the `rm` command, allowing users to recover files if needed as use all `rm` options.
 
+## Compatibility 📦
+
+Gotrash has only been tested on ubuntu 24.04 and 20.04, but it should work on most Linux distributions and macOS.
+
 ## Features ✨
 
 - Move files to the trash instead of permanently deleting them

@@ -74,8 +74,8 @@ func printHelp() {
 	fmt.Println("Options:")
 	fmt.Println("📋 -h, --help         display this help and exit")
 	fmt.Println("")
-	fmt.Println("Note: To use gotrash instead of rm, consider aliasing rm to gotrash by running:")
-	fmt.Println("  🔄 alias rm=\"gotrash\"")
-	fmt.Println("You can use gotrash as a proxy for the rm command with all options 🚀")
+	fmt.Println("Note: Consider aliasing rm to gotrash:")
+	fmt.Println("🔄 alias rm=\"gotrash\"")
+	fmt.Println("You can use gotrash as a proxy for the rm command with all it's options 🚀")
 	fmt.Println("")
 }
