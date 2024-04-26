@@ -7,64 +7,68 @@ import (
 	"path/filepath"
 )
 
-func getTrashPath() string {
+func main() {
+	if len(os.Args) == 1 || os.Args[1] == "--help" || os.Args[1] == "-h" {
+		printHelp()
+		return
+	}
+
+	if err := validateCommand("rm"); err != nil {
+		fmt.Fprintf(os.Stderr, "Required command 'rm' is not available: %v\n", err)
+		os.Exit(1)
+	}
+
+	trashPath, err := getTrashPath()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Cannot determine trash path: %v\n", err)
+		os.Exit(1)
+	}
+
+	if err := os.MkdirAll(trashPath, 0755); err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to create trash directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	processFiles(os.Args[1:], trashPath)
+}
+
+func getTrashPath() (string, error) {
 	xdgDataHome := os.Getenv("XDG_DATA_HOME")
 	if xdgDataHome != "" {
-		return filepath.Join(xdgDataHome, "Trash", "files")
+		return filepath.Join(xdgDataHome, "Trash", "files"), nil
 	}
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		os.Exit(1)
+		return "", err
 	}
-	return filepath.Join(homeDir, ".local", "share", "Trash", "files")
+	return filepath.Join(homeDir, ".local", "share", "Trash", "files"), nil
 }
 
-func main() {
-	command := "rm"
+func validateCommand(command string) error {
 	_, err := exec.LookPath(command)
-	if err != nil {
-		os.Args = append([]string{command}, os.Args...)
-	}
+	return err
+}
 
-	if len(os.Args) > 1 && (os.Args[1] == "--help" || os.Args[1] == "-h") {
-		printHelp()
-		os.Exit(0)
-	}
-
-	files := os.Args[1:]
-
-	trashPath := getTrashPath()
-
-	err = os.MkdirAll(trashPath, 0755)
-	if err != nil {
-		os.Exit(1)
-	}
-
+func processFiles(files []string, trashPath string) {
 	for _, file := range files {
-		err := moveFileToTrash(file, trashPath)
-		if err != nil {
-			fmt.Printf("Error moving %s to trash: %v\n", file, err)
+		if err := moveFileToTrash(file, trashPath); err != nil {
+			fmt.Fprintf(os.Stderr, "Error moving %s to trash: %v\n", file, err)
 		}
 	}
 }
 
 func moveFileToTrash(filename, trashPath string) error {
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
+	source, err := filepath.Abs(filename)
+	if err != nil {
+		return fmt.Errorf("failed to get absolute path: %v", err)
+	}
+
+	if _, err := os.Stat(source); os.IsNotExist(err) {
 		return fmt.Errorf("file %s does not exist", filename)
 	}
 
-	dest := filepath.Join(trashPath, filepath.Base(filename))
-
-	err := os.Rename(filename, dest)
-	if err != nil {
-		return err
-	}
-
-	if _, err := os.Stat(dest); os.IsNotExist(err) {
-		return fmt.Errorf("file %s not found in trash", filename)
-	}
-
-	return nil
+	dest := filepath.Join(trashPath, filepath.Base(source))
+	return os.Rename(source, dest)
 }
 
 func printHelp() {
@@ -75,7 +79,7 @@ func printHelp() {
 	fmt.Println("📋 -h, --help         display this help and exit")
 	fmt.Println("")
 	fmt.Println("Note: Consider aliasing rm to gotrash:")
-	fmt.Println("🔄 alias rm=\"gotrash\"")
-	fmt.Println("You can use gotrash as a proxy for the rm command with all it's options 🚀")
+	fmt.Println("🔄 alias rm='gotrash'")
+	fmt.Println("You can use gotrash as a proxy for the rm command with all its options 🚀")
 	fmt.Println("")
 }
