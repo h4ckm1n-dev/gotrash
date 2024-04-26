@@ -36,13 +36,13 @@ Optionaly you can alias gotrash to rm
 ```bash
 alias rm="gotrash"
 ```
-Usage 🛠️
+## Usage 🛠️
 ```bash
 gotrash [OPTION]... [FILE]...
 [OPTION]: Optional arguments, including -h or --help to display help information.
 [FILE]...: List of files to move to the trash.
 ```
-Examples
+### Examples
 Move a single file to the trash:
 ```bash
 gotrash example.txt
@@ -57,11 +57,11 @@ For more options, run:
 ```bash
 gotrash --help
 ```
-License 📝
+## License 📝
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-Contributing 🤝
+## Contributing 🤝
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
-Acknowledgments 🙏
+## Acknowledgments 🙏
 This project was inspired by rmtrash by Sindre Sorhus.
