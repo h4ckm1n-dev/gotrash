@@ -1,6 +1,6 @@
 # GoTrash 🗑️
 
-GoTrash is a simple command-line tool written in Go that moves files to the trash instead of deleting them permanently. It provides a safer alternative to the `rm` command, allowing users to recover files if needed.
+GoTrash is a simple command-line tool written in Go that moves files to the trash instead of deleting them permanently. It act has a proxy for the `rm` command, and it provides a safer alternative to the `rm` command, allowing users to recover files if needed.
 
 ## Features ✨
 
