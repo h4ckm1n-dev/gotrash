@@ -24,6 +24,6 @@ jobs:
     - name: Test
       run: go test -v -coverprofile=coverage.out ./...
 
-    - name: Coverage report
-      if: always()
-      run: go tool cover -func=coverage.out
+    - name: Security Scan
+      run: |
+        docker run --rm -v $(pwd):/app aquasec/trivy --exit-code 1 /app
