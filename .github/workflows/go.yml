@@ -26,7 +26,7 @@ jobs:
 
     - name: Security Scan
       run: |
-        docker run --rm -v ${{ github.workspace }}:/repo aquasec/trivy repo https://github.com/h4ckm1n-dev/gotrash
+        docker run --rm -v ${{ github.workspace }}:/repo /repo
     
     - name: Cache Go modules
       uses: actions/cache@v3
