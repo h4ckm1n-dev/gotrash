@@ -26,7 +26,7 @@ cd gotrash
 ```
 Compile the source code:
 ```bash
-go build
+go build -o gotrash
 ```
 Move the generated binary to a directory in your PATH, for example:
 ```bash
