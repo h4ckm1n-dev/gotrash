@@ -26,4 +26,5 @@ jobs:
 
     - name: Security Scan
       run: |
-         docker run --rm -v aquasec/trivy repo .
+        docker run --rm -v ${{ github.workspace }}:/repo aquasec/trivy repo /repo
+
