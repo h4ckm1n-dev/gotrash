@@ -15,7 +15,7 @@ To use GoTrash, you can either compile the source code yourself or download the 
 
 ### From Source
 
-1. Clone this repository:
+Clone this repository:
 
 ```bash
 git clone https://github.com/h4ckm1n-dev/gotrash.git
