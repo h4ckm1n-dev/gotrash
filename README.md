@@ -4,7 +4,7 @@ GoTrash is a simple command-line tool written in Go that moves files to the tras
 
 ## Compatibility 📦
 
-Gotrash has only been tested on ubuntu 24.04 and 20.04, but it should work on most Linux distributions and macOS.
+Gotrash has only been tested on ubuntu 24.04 and 22.04, but it should work on most Linux distributions and macOS.
 
 ## Features ✨
 
