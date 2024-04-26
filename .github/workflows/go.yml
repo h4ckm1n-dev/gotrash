@@ -26,20 +26,4 @@ jobs:
 
     - name: Security Scan
       run: |
-        docker run --rm -v $(pwd):/app aquasec/trivy repository HIGH -o trivy-report.json /app
-
-    - name: Read Trivy Report
-      id: read_report
-      run: echo "::set-output name=contents::$(cat trivy-report.json)"
-
-    - name: Update README with Trivy Report
-      if: always()
-      run: |
-        echo "# GoTrash 🗑️" > README.md
-        echo "" >> README.md
-        echo "[![Go](https://github.com/h4ckm1n-dev/gotrash/actions/workflows/go.yml/badge.svg)](https://github.com/h4ckm1n-dev/gotrash/actions/workflows/go.yml)" >> README.md
-        echo "" >> README.md
-        echo "## Trivy Report" >> README.md
-        echo "```json" >> README.md
-        echo "${{ steps.read_report.outputs.contents }}" >> README.md
-        echo "```" >> README.md
+        docker run --rm -v $(pwd):/app aquasec/trivy HIGH -o trivy-report.json /app
