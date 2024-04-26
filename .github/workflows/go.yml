@@ -26,7 +26,7 @@ jobs:
 
     - name: Security Scan
       run: |
-        docker run --rm -v $(pwd):/app aquasec/trivy -s HIGH /app
+        docker run --rm -v $(pwd):/app aquasec/trivy --severity HIGH /app
 
     - name: Update README
       if: always()
