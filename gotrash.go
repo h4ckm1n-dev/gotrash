@@ -68,10 +68,14 @@ func moveFileToTrash(filename, trashPath string) error {
 }
 
 func printHelp() {
-	fmt.Println("Usage: rm [OPTION]... [FILE]...")
+	fmt.Println("🗑️ Usage: gotrash [OPTION]... [FILE]...")
 	fmt.Println("Remove (move to trash) the FILE(s).")
 	fmt.Println("")
 	fmt.Println("Options:")
-	fmt.Println("  -h, --help   display this help and exit")
+	fmt.Println("📋 -h, --help         display this help and exit")
+	fmt.Println("")
+	fmt.Println("Note: To use gotrash instead of rm, consider aliasing rm to gotrash by running:")
+	fmt.Println("  🔄 alias rm=\"gotrash\"")
+	fmt.Println("You can use gotrash as a proxy for the rm command with all options 🚀")
 	fmt.Println("")
 }
