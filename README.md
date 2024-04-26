@@ -5,8 +5,7 @@ GoTrash is a simple command-line tool written in Go that moves files to the tras
 ## Features ✨
 
 - Move files to the trash instead of permanently deleting them
-- Cross-platform support (Linux, macOS, Windows)
-- Simple and easy-to-use command-line interface
+- Simple and easy-to-use command-line tool, with a similar interface to `rm`
 - Compatible with most shell environments
 - Option to display help information
 
@@ -18,9 +17,9 @@ To use GoTrash, you can either compile the source code yourself or download the 
 
 1. Clone this repository:
 
-   ```bash
-   git clone https://github.com/h4ckm1n-dev/gotrash.git
-   ```
+```bash
+git clone https://github.com/h4ckm1n-dev/gotrash.git
+```
 Navigate to the repository directory:
 ```bash
 cd gotrash
