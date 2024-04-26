@@ -26,4 +26,4 @@ jobs:
 
     - name: Security Scan
       run: |
-        trivy repo .
+         docker run --rm -v aquasec/trivy repo .
