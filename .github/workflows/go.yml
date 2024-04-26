@@ -24,7 +24,7 @@ jobs:
         mkdir -p $HOME/.cache/go-build
 
     - name: Cache Go modules and build cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/go/pkg/mod
