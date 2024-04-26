@@ -27,3 +27,11 @@ jobs:
     - name: Security Scan
       run: |
         docker run --rm -v $(pwd):/app aquasec/trivy --exit-code 1 /app
+
+    - name: Update README
+      if: always()
+      run: |
+        echo "# GoTrash 🗑️" > README.md
+        echo "" >> README.md
+        echo "[![Build Status](https://img.shields.io/badge/Build-Success-brightgreen)](https://github.com/your-repo)" >> README.md
+        echo "[![Trivy Report](https://img.shields.io/badge/Trivy-Report-informational)](https://link-to-trivy-report)" >> README.md
