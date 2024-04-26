@@ -26,12 +26,20 @@ jobs:
 
     - name: Security Scan
       run: |
-        docker run --rm -v $(pwd):/app aquasec/trivy repositorie
+        docker run --rm -v $(pwd):/app aquasec/trivy repository HIGH -o trivy-report.json /app
 
-    - name: Update README
+    - name: Read Trivy Report
+      id: read_report
+      run: echo "::set-output name=contents::$(cat trivy-report.json)"
+
+    - name: Update README with Trivy Report
       if: always()
       run: |
         echo "# GoTrash 🗑️" > README.md
         echo "" >> README.md
-        echo "[![Build Status](https://img.shields.io/badge/Build-Success-brightgreen)](https://github.com/your-repo)" >> README.md
-        echo "[![Trivy Report](https://img.shields.io/badge/Trivy-Report-informational)](https://link-to-trivy-report)" >> README.md
+        echo "[![Go](https://github.com/h4ckm1n-dev/gotrash/actions/workflows/go.yml/badge.svg)](https://github.com/h4ckm1n-dev/gotrash/actions/workflows/go.yml)" >> README.md
+        echo "" >> README.md
+        echo "## Trivy Report" >> README.md
+        echo "```json" >> README.md
+        echo "${{ steps.read_report.outputs.contents }}" >> README.md
+        echo "```" >> README.md
