@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
+	"strconv"
+	"syscall"
 )
 
 func main() {
@@ -18,30 +21,19 @@ func main() {
 		os.Exit(1)
 	}
 
-	trashPath, err := getTrashPath()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Cannot determine trash path: %v\n", err)
-		os.Exit(1)
-	}
-
-	if err := os.MkdirAll(trashPath, 0755); err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to create trash directory: %v\n", err)
-		os.Exit(1)
-	}
-
-	processFiles(os.Args[1:], trashPath)
+	processFiles(os.Args[1:])
 }
 
-func getTrashPath() (string, error) {
+func getTrashPath(uid string) (string, error) {
+	u, err := user.LookupId(uid)
+	if err != nil {
+		return "", err
+	}
 	xdgDataHome := os.Getenv("XDG_DATA_HOME")
 	if xdgDataHome != "" {
 		return filepath.Join(xdgDataHome, "Trash", "files"), nil
 	}
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(homeDir, ".local", "share", "Trash", "files"), nil
+	return filepath.Join(u.HomeDir, ".local", "share", "Trash", "files"), nil
 }
 
 func validateCommand(command string) error {
@@ -49,22 +41,38 @@ func validateCommand(command string) error {
 	return err
 }
 
-func processFiles(files []string, trashPath string) {
+func processFiles(files []string) {
 	for _, file := range files {
-		if err := moveFileToTrash(file, trashPath); err != nil {
+		if err := moveFileToTrash(file); err != nil {
 			fmt.Fprintf(os.Stderr, "Error moving %s to trash: %v\n", file, err)
 		}
 	}
 }
 
-func moveFileToTrash(filename, trashPath string) error {
+func moveFileToTrash(filename string) error {
 	source, err := filepath.Abs(filename)
 	if err != nil {
 		return fmt.Errorf("failed to get absolute path: %v", err)
 	}
 
-	if _, err := os.Stat(source); os.IsNotExist(err) {
+	fileInfo, err := os.Stat(source)
+	if err != nil {
 		return fmt.Errorf("file %s does not exist", filename)
+	}
+
+	stat, ok := fileInfo.Sys().(*syscall.Stat_t)
+	if !ok {
+		return fmt.Errorf("failed to get file owner info")
+	}
+
+	uid := strconv.Itoa(int(stat.Uid))
+	trashPath, err := getTrashPath(uid)
+	if err != nil {
+		return fmt.Errorf("cannot determine trash path: %v", err)
+	}
+
+	if err := os.MkdirAll(trashPath, 0755); err != nil {
+		return fmt.Errorf("failed to create trash directory: %v", err)
 	}
 
 	dest := filepath.Join(trashPath, filepath.Base(source))
